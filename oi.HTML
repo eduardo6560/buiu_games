@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo</title>
+    <link rel="stylesheet" href="oi.css">
+</head>
+<body>
+    <div id="gameArea">
+        <div id="player"></div>
+        <div id="healthBar"></div> <!-- Barra de vida -->
+    </div>
+    <script src="script.js"></script>
+</body>
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador de Tempo com Teclado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+        .contador {
+            font-size: 48px;
+            padding: 20px;
+            background-color: #333;
+            color: white;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="contador" id="contador">0</div>
+
+    <script>
+        let tempo = 0;
+        let contando = false;
+
+        // Função para iniciar o contador
+        function iniciarContagem() {
+            if (!contando) {
+                contando = true;
+                setInterval(atualizarContador, 1000); // Atualiza a cada 1 segundo
+            }
+        }
+
+        // Função para atualizar o contador
+        function atualizarContador() {
+            tempo++;
+            document.getElementById("contador").innerText = tempo;
+        }
+
+        // Função que será chamada quando uma tecla for pressionada
+        function verificarTecla(event) {
+            const teclasPermitidas = ['w', 'a', 's', 'd', 'ArrowLeft', 'ArrowRight', 'ArrowDown', 'ArrowUp'];
+            if (teclasPermitidas.includes(event.key)) {
+                iniciarContagem();
+            }
+        }
+
+        // Escutando os eventos de teclado
+        window.addEventListener('keydown', verificarTecla);
+    </script>
+</body>
+</html>

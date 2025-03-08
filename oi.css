@@ -1,0 +1,71 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+#gameArea {
+    width: 300px;
+    height: 500px;
+    position: relative;
+    background-color: #87CEEB;
+    overflow: hidden;
+    border: 2px solid #000;
+}
+
+#player {
+    width: 45px;  /* Tamanho da imagem do jogador */
+    height: 45px;  /* Tamanho da imagem do jogador */
+    position: absolute;
+    bottom: 0;
+    left: 135px;
+    background-image: url('buiu1.webp');  /* Caminho da imagem do jogador */
+    background-size: cover;
+    background-position: center;
+}
+
+.obstacle {
+    width: 50px;  /* Tamanho da imagem do obstáculo */
+    height: 50px;  /* Tamanho da imagem do obstáculo */
+    position: absolute;
+    top: -50px;
+    background-image: url('imposto.png');  /* Caminho da imagem do obstáculo */
+    background-size: cover;
+    background-position: center;
+    animation: fall 3s linear infinite;
+}
+
+@keyframes fall {
+    0% {
+        top: -50px;
+    }
+    100% {
+        top: 500px;
+    }
+}
+
+
+.cachoro_quente {
+    width: 50px;
+    height: 50px;
+    background-image: url('cachoro\ quente.png');  /* Caminho da imagem do obstáculo */
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+}
+
+#healthBar {
+    width: 100%;
+    height: 20px;
+    background-color: green;
+    position: absolute;
+    top: 10px;
+}
