@@ -6,14 +6,15 @@
     <title>Jogo</title>
     <link rel="stylesheet" href="oi.css">
 </head>
+<div class="conteudo">
 <body>
     <div id="gameArea">
         <div id="player"></div>
         <div id="healthBar"></div> <!-- Barra de vida -->
+        <div id="obstacle"></div>
     </div>
     <script src="script.js"></script>
 </body>
-
 
 
 
@@ -77,3 +78,80 @@
     </script>
 </body>
 </html>
+
+</div>
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zoom com Ctrl + Enter</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      justify-content: center; /* Centraliza o conteúdo */
+      align-items: center; /* Centraliza o conteúdo */
+      height: 100vh;
+      overflow: hidden; /* Evita barras de rolagem */
+    }
+
+    .conteudo {
+      transition: transform 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+  
+
+  <script>
+    let zoomLevel = 1; // Nível inicial de zoom
+
+    // Função que aplica o zoom de 50%
+    function aplicarZoom() {
+      zoomLevel *= 1.5; // Aumenta o zoom em 50%
+      const conteudo = document.querySelector('.conteudo');
+      conteudo.style.transform = `scale(${zoomLevel})`; // Aplica a transformação de zoom
+    }
+
+    // Ouve os eventos de teclado
+    document.addEventListener('keydown', function(event) {
+      // Verifica se Ctrl + Enter foi pressionado
+      if (event.ctrlKey && event.key === 'Enter') {
+        aplicarZoom();
+      }
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu site com música</title>
+</head>
+<body>
+   
+
+    <!-- Player de áudio invisível -->
+    <audio id="background-music" autoplay loop>
+        <source src="pix.mp3" type="audio/mp3">
+        Seu navegador não suporta a tag de áudio.
+    </audio>
+
+    <script>
+        // Inicia a música assim que a página for carregada
+        document.getElementById('background-music').play();
+    </script>
+</body>
+</html>
+
+
