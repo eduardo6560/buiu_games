@@ -1,17 +1,30 @@
 const player = document.getElementById('player');
 const healthBar = document.getElementById('healthBar');
-let playerPositionX = 135; // Posição horizontal (eixo X)
-let playerPositionY = 450; // Posição vertical (eixo Y)
-let playerHealth = 100; // Vida do jogador (inicialmente 100)
+const contador = document.getElementById('contador');
 
-const maxObstacles = 6; // Limite máximo de obstáculos na tela
-let activeObstacles = 0; // Contador de obstáculos ativos na tela
+let playerPositionX = 135;
+let playerPositionY = 450;
+let playerHealth = 100;
+let gameTime = 0;
+let activeObstacles = 0;
+const maxObstacles = 6;
+
+// Função para atualizar o tempo
+function updateTime() {
+    gameTime++;
+
+    let minutes = Math.floor(gameTime / 60);
+    let seconds = gameTime % 60;
+    if (seconds < 10) {
+        seconds = '0' + seconds;
+    }
+
+    contador.innerText = `${minutes}:${seconds}`;
+}
 
 // Função para criar obstáculos normais
 function createObstacle() {
-    if (activeObstacles >= maxObstacles) {
-        return;
-    }
+    if (activeObstacles >= maxObstacles) return;
 
     const obstacle = document.createElement('div');
     obstacle.classList.add('obstacle');
@@ -32,24 +45,16 @@ function createObstacle() {
             obstaclePosition += 5;
             obstacle.style.top = obstaclePosition + 'px';
 
-            if (
-                obstaclePosition >= 470 && 
-                obstaclePosition <= 500 &&
-                playerPositionX >= randomX - 50 &&
-                playerPositionX <= randomX + 50
-            ) {
-                // Diminui a vida do jogador ao colidir com um obstáculo normal
+            if (obstaclePosition >= 470 && obstaclePosition <= 500 &&
+                playerPositionX >= randomX - 50 && playerPositionX <= randomX + 50) {
                 playerHealth -= 34;
                 healthBar.style.width = playerHealth + '%';
 
                 if (playerHealth <= 0) {
-                    alert('Game Over!');  // Exibe o alerta de Game Over
-                    clearInterval(interval); // Interrompe o intervalo
-                    playerHealth = 100; // Restaura a saúde do jogador
-                    healthBar.style.width = '100%'; // Restaura a barra de saúde
-                    location.reload(); // Recarrega a página para reiniciar o jogo
+                    alert('Game Over!');
+                    resetGame();
                 }
-                
+
                 clearInterval(interval);
                 activeObstacles--;
             }
@@ -57,55 +62,35 @@ function createObstacle() {
     }, 20);
 }
 
-// Função para criar obstáculos "cachorro quente" (que cura)
+// Função para criar obstáculos de "cachorro quente"
 function createHotDogObstacle() {
-    if (activeObstacles >= maxObstacles) {
-        return;
-    }
+    if (activeObstacles >= maxObstacles) return;
 
-    const cachoro_quente = document.createElement('div');
-    cachoro_quente.classList.add('cachoro_quente');
-    document.getElementById('gameArea').appendChild(cachoro_quente);
+    const hotDog = document.createElement('div');
+    hotDog.classList.add('cachoro_quente');
+    document.getElementById('gameArea').appendChild(hotDog);
 
     const randomX = Math.floor(Math.random() * 250);
-    cachoro_quente.style.left = randomX + 'px';
+    hotDog.style.left = randomX + 'px';
 
     activeObstacles++;
 
     let obstaclePosition = 0;
     const interval = setInterval(() => {
         if (obstaclePosition > 500) {
-            cachoro_quente.remove();
+            hotDog.remove();
             clearInterval(interval);
             activeObstacles--;
         } else {
             obstaclePosition += 3;
-            cachoro_quente.style.top = obstaclePosition + 'px';
+            hotDog.style.top = obstaclePosition + 'px';
 
-            if (
-                obstaclePosition >= 470 && 
-                obstaclePosition <= 500 &&
-                playerPositionX >= randomX - 50 &&
-                playerPositionX <= randomX + 50
-            ) {
-                // Aumenta a vida do jogador ao colidir com um "cachorro quente"
+            if (obstaclePosition >= 470 && obstaclePosition <= 500 &&
+                playerPositionX >= randomX - 50 && playerPositionX <= randomX + 50) {
                 playerHealth += 15;
-
-                // Evita que a vida ultrapasse 100%
-                if (playerHealth > 100) {
-                    playerHealth = 100;
-                }
-
-                // Atualiza a barra de vida
+                if (playerHealth > 100) playerHealth = 100;
                 healthBar.style.width = playerHealth + '%';
 
-                // Verifica se a vida acabou
-                if (playerHealth <= 0) {
-                    alert('Game Over!');
-                    clearInterval(interval);
-                    playerHealth = 100;
-                    healthBar.style.width = '100%';
-                }
                 clearInterval(interval);
                 activeObstacles--;
             }
@@ -113,60 +98,53 @@ function createHotDogObstacle() {
     }, 20);
 }
 
-// Criar obstáculos normais a cada 2 segundos
-setInterval(createObstacle, 2000);
+// Função para resetar o jogo
+function resetGame() {
+    playerHealth = 100;
+    healthBar.style.width = '100%';
+    location.reload();
+}
 
-// Criar obstáculos "cachorro quente" a cada 45 segundos
+// Criar obstáculos normais e "cachorros quentes" periodicamente
+setInterval(createObstacle, 2000);
 setInterval(createHotDogObstacle, 45000);
 
 // Movimento do jogador
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft' && playerPositionX > 0) {
-        playerPositionX -= 15;
-    } else if (e.key === 'ArrowRight' && playerPositionX < 250) {
-        playerPositionX += 15;
-    } else if (e.key === 'ArrowDown' && playerPositionY > 0) {
-        playerPositionY -= 15;
-    } else if (e.key === 'ArrowUp' && playerPositionY < 450) {
-        playerPositionY += 15;
-    }
-    else if (e.key === 'a' && playerPositionX > 0) {
-        playerPositionX -= 10;  // Move o jogador para a esquerda
-    } else if (e.key === 'd' && playerPositionX < 250) {
-        playerPositionX += 10;  // Move o jogador para a direita
-    } else if (e.key === 's' && playerPositionY > 0) {
-        playerPositionY -= 10;  // Move o jogador para cima
-    } else if (e.key === 'w' && playerPositionY < 450) {
-        playerPositionY += 10;  // Move o jogador para baixo
+    if (e.key === 'ArrowLeft' || e.key === 'a') {
+        if (playerPositionX > 0) playerPositionX -= 10;
+    } else if (e.key === 'ArrowRight' || e.key === 'd') {
+        if (playerPositionX < 250) playerPositionX += 10;
+    } else if (e.key === 'ArrowUp' || e.key === 'w') {
+        if (playerPositionY < 450) playerPositionY += 10;
+    } else if (e.key === 'ArrowDown' || e.key === 's') {
+        if (playerPositionY > 0) playerPositionY -= 10;
     }
 
     player.style.left = playerPositionX + 'px';
     player.style.bottom = playerPositionY + 'px';
 });
 
-
-
-
-let gameTime = 0; // Tempo do jogo em segundos
-
-// Função para atualizar o tempo
-function updateTime() {
-    gameTime++; // Incrementa 1 segundo a cada chamada
-
-    // Calcula minutos e segundos
-    let minutes = Math.floor(gameTime / 60);
-    let seconds = gameTime % 60;
-
-    // Formatação do tempo para o formato 00:00
-    if (seconds < 10) {
-        seconds = '0' + seconds; // Adiciona zero à esquerda dos segundos, se necessário
-    }
-
-    // Exibe o tempo formatado no console
-    console.clear(); // Limpa o console a cada atualização para manter a tela limpa
-    console.log(`Tempo: ${minutes}:${seconds}`);
-}
-
-// Atualiza o tempo a cada 1 segundo (1000 milissegundos)
+// Atualiza o tempo a cada 1 segundo
 setInterval(updateTime, 1000);
 
+// Função para colocar o jogo em tela cheia
+function toggleFullScreen(event) {
+    // Verifica se as teclas Ctrl e Enter estão pressionadas
+    if (event.ctrlKey && event.key === 'Enter') {
+        // Verifica se o navegador suporta o método de tela cheia
+        if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+        } else if (document.documentElement.mozRequestFullScreen) { // Firefox
+            document.documentElement.mozRequestFullScreen();
+        } else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari, Opera
+            document.documentElement.webkitRequestFullscreen();
+        } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+            document.documentElement.msRequestFullscreen();
+        }
+
+    }
+}
+
+// Adiciona o evento de teclado para escutar a combinação Ctrl + Enter
+document.addEventListener('keydown', toggleFullScreen);
